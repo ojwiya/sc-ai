@@ -1,0 +1,14 @@
+# Data files (large)
+properties_data.json
+properties_clean.json
+
+# ChromaDB
+chroma_db/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
