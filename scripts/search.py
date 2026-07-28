@@ -28,15 +28,24 @@ def search(query, limit=10, country=None, max_price=None, min_price=None,
     client = chromadb.PersistentClient(path=str(CHROMA_DIR))
     collection = client.get_collection(COLLECTION_NAME)
 
-    where = {}
+    conditions = []
     if country:
-        where['country'] = country
-    if min_price is not None:
-        where.setdefault('price', {})['$gte'] = float(min_price)
-    if max_price is not None:
-        where.setdefault('price', {})['$lte'] = float(max_price)
+        conditions.append({'country': country})
+    if min_price is not None or max_price is not None:
+        price_cond = {}
+        if min_price is not None:
+            price_cond['$gte'] = float(min_price)
+        if max_price is not None:
+            price_cond['$lte'] = float(max_price)
+        conditions.append({'price': price_cond})
     if min_bedrooms is not None:
-        where['bedrooms'] = {'$gte': int(min_bedrooms)}
+        conditions.append({'bedrooms': {'$gte': int(min_bedrooms)}})
+
+    where = {}
+    if len(conditions) == 1:
+        where = conditions[0]
+    elif len(conditions) > 1:
+        where = {'$and': conditions}
 
     kwargs = {'query_texts': [query], 'n_results': limit}
     if where:
@@ -60,7 +69,7 @@ def search(query, limit=10, country=None, max_price=None, min_price=None,
         })
 
     # Filter out results with score <= 0 (nonsense queries)
-    output = [r for r in output if r['score'] > 0]
+    output = [r for r in output if r['score'] >= 0]
 
     return output
 
