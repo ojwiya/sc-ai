@@ -58,6 +58,10 @@ def search(query, limit=10, country=None, max_price=None, min_price=None,
             'bathrooms': meta.get('bathrooms', 0),
             'score': round(1.0 - dist, 4),
         })
+
+    # Filter out results with score <= 0 (nonsense queries)
+    output = [r for r in output if r['score'] > 0]
+
     return output
 
 
