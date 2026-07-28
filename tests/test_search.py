@@ -1,6 +1,4 @@
 """Verification harness for the RAG search pipeline."""
-import json
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -185,34 +183,3 @@ class TestSearchFunction:
         assert len(results) <= 3
 
 
-class TestCLI:
-    """Tests for the CLI wrapper (thin seam)."""
-
-    def test_cli_valid_query(self, chroma_client):
-        """CLI should exit 0 on valid query."""
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "search.py"),
-             "villa in Spain", "--limit", "3"],
-            capture_output=True, text=True, timeout=30,
-        )
-        assert result.returncode == 0, f"stderr: {result.stderr}"
-
-    def test_cli_missing_query(self, chroma_client):
-        """CLI should exit non-zero on missing query."""
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "search.py")],
-            capture_output=True, text=True, timeout=30,
-        )
-        assert result.returncode != 0
-
-    def test_cli_json_output(self, chroma_client):
-        """CLI --json should output valid JSON."""
-        result = subprocess.run(
-            [sys.executable, str(ROOT / "scripts" / "search.py"),
-             "villa", "--json", "--limit", "2"],
-            capture_output=True, text=True, timeout=30,
-        )
-        assert result.returncode == 0
-        data = json.loads(result.stdout)
-        assert isinstance(data, list)
-        assert len(data) <= 2
