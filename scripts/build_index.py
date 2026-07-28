@@ -38,7 +38,7 @@ def format_property_text(p):
 
 def main():
     parser = argparse.ArgumentParser(description='Build ChromaDB property index')
-    parser.add_argument('--batch-size', type=int, default=200, help='Batch size for embedding')
+    parser.add_argument('--batch-size', type=int, default=100, help='Batch size for embedding')
     parser.add_argument('--data-file', default=str(DEFAULT_DATA), help='Path to properties_clean.json')
     parser.add_argument('--chroma-dir', default=str(DEFAULT_CHROMA), help='Path to ChromaDB directory')
     parser.add_argument('--collection', default='overseas_properties', help='Collection name')
