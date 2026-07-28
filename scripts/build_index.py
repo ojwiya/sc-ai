@@ -15,21 +15,21 @@ DEFAULT_CHROMA = ROOT / 'chroma_db'
 def format_property_text(p):
     """Format a property into a searchable text chunk for embeddings."""
     currency_map = {"EUR": "€", "GBP": "£", "USD": "$", "CHF": "CHF"}
-    curr = currency_map.get(p.get('currencyCode', 'EUR'), p.get('currencyCode', '€'))
+    curr = currency_map.get(p.get('currency', 'EUR'), p.get('currency', '€'))
     
     parts = [
         p.get('title', 'Untitled'),
-        f"Located in {p.get('locationName', 'Unknown')}, {p.get('country_slug', 'Unknown')}",
+        f"Located in {p.get('location', 'Unknown')}, {p.get('country_slug', 'Unknown')}",
         f"Price: {curr}{p.get('price', 0):,.0f}",
     ]
     if p.get('bedrooms'):
         parts.append(f"{p['bedrooms']} bedroom{'s' if p['bedrooms'] != 1 else ''}")
     if p.get('bathrooms'):
         parts.append(f"{p['bathrooms']} bathroom{'s' if p['bathrooms'] != 1 else ''}")
-    if p.get('buildSize'):
-        parts.append(f"Build size: {p['buildSize']} square meters")
-    if p.get('plotSize'):
-        parts.append(f"Plot size: {p['plotSize']} square meters")
+    if p.get('build_size_m2'):
+        parts.append(f"Build size: {p['build_size_m2']} square meters")
+    if p.get('plot_size_m2'):
+        parts.append(f"Plot size: {p['plot_size_m2']} square meters")
     if p.get('description'):
         parts.append(p['description'][:600])
     
@@ -48,8 +48,15 @@ def main():
     
     # Load data
     print(f"Loading {args.data_file}...")
-    with open(args.data_file) as f:
-        data = json.load(f)
+    try:
+        with open(args.data_file) as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"Error: data file not found: {args.data_file}")
+        sys.exit(1)
+    except json.JSONDecodeError as e:
+        print(f"Error: invalid JSON in {args.data_file}: {e}")
+        sys.exit(1)
     
     # Handle both array and dict formats
     if isinstance(data, list):
@@ -101,13 +108,13 @@ def main():
                 batch_metas.append({
                     'title': str(p.get('title', '')),
                     'country': str(p.get('country_slug', p.get('country', ''))),
-                    'location': str(p.get('locationName', '')),
+                    'location': str(p.get('location', '')),
                     'price': float(p.get('price', 0)),
-                    'currency': str(p.get('currencyCode', 'EUR')),
+                    'currency': str(p.get('currency', 'EUR')),
                     'bedrooms': int(p.get('bedrooms') or 0),
                     'bathrooms': int(p.get('bathrooms') or 0),
-                    'buildSize': p.get('buildSize', 0) or 0,
-                    'plotSize': p.get('plotSize', 0) or 0,
+                    'buildSize': p.get('build_size_m2', 0) or 0,
+                    'plotSize': p.get('plot_size_m2', 0) or 0,
                 })
                 indexed += 1
             except Exception as e:
