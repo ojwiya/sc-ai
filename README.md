@@ -1,50 +1,145 @@
-# Overseas Property RAG - Your Overseas Home
+# Overseas Property RAG — Your Overseas Home
 
-Scraped property data from [Your Overseas Home](https://www.youroverseashome.com/) with a RAG (Retrieval-Augmented Generation) pipeline for natural language property search.
+A RAG (Retrieval-Augmented Generation) pipeline for searching overseas property
+listings scraped from [Your Overseas Home](https://www.youroverseashome.com/)
+using natural language queries.
+
+## What it does
+
+- Scrapes ~11,960 property listings across 9 countries
+- Embeds them into a persistent ChromaDB vector store
+- Lets you search with natural language + structured filters (country, price, bedrooms)
+- Returns ranked results with relevance scores
 
 ## Data
 
 11,960 properties scraped from the API across 9 countries:
-- Spain: 7,787
-- Cyprus: 1,478
-- Portugal: 1,060
-- France: 692
-- Italy: 558
-- USA: 184
-- Malta: 76
-- Switzerland: 70
-- Greece: 55
+
+| Country | Count |
+|---------|-------|
+| Spain | 7,787 |
+| Cyprus | 1,478 |
+| Portugal | 1,060 |
+| France | 692 |
+| Italy | 558 |
+| USA | 184 |
+| Malta | 76 |
+| Switzerland | 70 |
+| Greece | 55 |
+
+## Architecture
+
+```
+properties_clean.json
+        │
+        ▼
+scripts/build_index.py  ──►  chroma_db/  (PersistentClient, all-MiniLM-L6-v2)
+        │
+        ▼
+scripts/search.py  ──►  search() function  ──►  ranked results
+        │
+        ▼
+demo.py  (end-to-end demonstration)
+```
+
+- **Vector store:** ChromaDB (persistent, local — no server needed)
+- **Embeddings:** `all-MiniLM-L6-v2` via ChromaDB default embedding function
+- **Similarity:** Cosine distance, reported as `score = 1 - distance`
 
 ## Files
 
-- `scrape.py` - Main scraper script (API-based)
-- `normalize_data.py` - Data normalization and enrichment
-- `rag_pipeline.py` - ChromaDB-based RAG search pipeline
-- `.gitignore` - Excludes large data files and ChromaDB store
+| File | Purpose |
+|------|---------|
+| `scrape.py` | API-based scraper for raw property data |
+| `normalize_data.py` | Normalizes raw data into `properties_clean.json` |
+| `scripts/check_env.py` | Verifies Python ≥ 3.11 and ChromaDB are available |
+| `scripts/build_index.py` | Builds the ChromaDB vector index from `properties_clean.json` |
+| `scripts/search.py` | `search()` function + CLI with filters and JSON output |
+| `tests/test_search.py` | pytest verification harness for the search seam |
+| `demo.py` | End-to-end demo with 3 canonical queries |
+| `rag_pipeline.py` | Legacy prototype (superseded by `scripts/`) |
 
 ## Setup
 
+Requires Python 3.11+ and ChromaDB.
+
 ```bash
 pip install chromadb
+python3 scripts/check_env.py   # verify environment
 ```
 
-## Usage
+## Build the index
 
-1. Scrape data:
 ```bash
-python3 scrape.py
+python3 scripts/build_index.py
 ```
 
-2. Normalize data:
+This reads `properties_clean.json`, embeds all 11,960 properties, and writes
+the vector store to `chroma_db/`. Progress prints every 100 records. Re-running
+is idempotent — it deletes and rebuilds the collection.
+
+## Search
+
 ```bash
-python3 normalize_data.py
+# Natural language query
+python3 scripts/search.py "3 bedroom villa in Spain with pool"
+
+# With filters
+python3 scripts/search.py --country portugal "apartment with sea views"
+python3 scripts/search.py --max-price 200000 "cheap house in France"
+python3 scripts/search.py --bedrooms 4 "large family home in Italy"
+python3 scripts/search.py --country spain --max-price 500000 --bedrooms 3 "villa"
+
+# JSON output (for piping)
+python3 scripts/search.py --json "apartment in Spain" --limit 5
+
+# List available countries
+python3 scripts/search.py --list-countries
 ```
 
-3. Build RAG and search:
+### CLI flags
+
+| Flag | Description |
+|------|-------------|
+| `query` | Positional natural-language query (required) |
+| `--country`, `-c` | Filter by country slug (e.g. `spain`, `france`) |
+| `--min-price` | Minimum price filter |
+| `--max-price`, `-p` | Maximum price filter |
+| `--bedrooms`, `-b` | Minimum bedrooms |
+| `--limit`, `-n` | Number of results (default 10) |
+| `--json` | Output as JSON array |
+| `--list-countries` | List countries in the index |
+
+## Run the demo
+
 ```bash
-python3 rag_pipeline.py "3 bedroom villa in Spain under 500k"
+python3 demo.py
 ```
 
-## API
+Runs 3 canonical queries against the live index and prints formatted results.
 
-The site uses a REST API at `property-portal-api-gw.youroverseashome.com/api/v1/properties/search` with 128,311 total properties.
+## Tests
+
+```bash
+python3 -m pytest tests/test_search.py -v
+```
+
+The harness uses a synthetic 10-property fixture — no dependency on the full
+dataset. Covers collection existence, `search()` result shape, country/price/
+bedroom filters, combined filters, nonsense-query handling, and `--limit`.
+
+## Make targets
+
+```bash
+make build     # build the ChromaDB index
+make search    # run an example search
+make test      # run the pytest harness
+make demo      # run the end-to-end demo
+make clean     # remove chroma_db/ and Python caches
+```
+
+## API source
+
+The site exposes a REST API at
+`property-portal-api-gw.youroverseashome.com/api/v1/properties/search`
+with 128,311 total properties. The MVP uses an 11,960-property sample.
