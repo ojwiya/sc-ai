@@ -52,17 +52,31 @@ There are several alternative RAG architectures I considered and deliberately di
 
 Each alternative has a place. The MVP used the simplest stack that proves the concept. Complexity increases only when the data demands it.
 
-## RAG → Loops → Graphs
+## What Kind of Engineering Is This?
 
-This project sits at a specific point in a broader engineering evolution: from RAG, to looping, to graph-based reasoning.
+The subagent-driven, two-stage review workflow used in this project is closer to **loop engineering** than prompt engineering — but not in the way most people mean. Here's how it maps across the three paradigms:
 
-**RAG** (this project) is retrieval + generation. You query a vector store, get relevant documents, pass them to a model with a prompt. It's stateless — each query is independent. The search seam (`search()` function) is the single ideal boundary for testing.
+### Prompt Engineering
+The closest to prompt engineering is the **spec → ticket decomposition** step. Writing a spec is like writing a prompt for the first subagent: you define the expected behavior, inputs, outputs, and guardrails. The review step is like a second prompt ("check this against the first prompt"). But unlike pure prompt engineering, the output isn't a one-shot response — it's committed code with test coverage and traceable history.
 
-**Loops** add state. An agent that retrieves, reasons, acts, observes, and loops back is doing agentic RAG — not just one-shot retrieval. Think: "find properties under €200k in Portugal, then compare the top 3, then draft a summary." Each step is a tool call; the sequence forms an execution loop.
+### Loop Engineering
+The development process is a **loop**: implement → review → fix → re-review → done. Each subagent invocation is an agent that does work, returns a result, and is evaluated. The review creates a feedback loop — if the result isn't right, the loop iterates with the fix. This is the same pattern as loop-based agentic systems: an agent takes an action, observes the outcome, and loops back if the observation doesn't match the goal.
 
-**Graphs** add structure to both knowledge and execution. A property knowledge graph links listings to neighborhoods, neighborhoods to cities, cities to regions, regions to countries. Queries traverse the graph. Execution graphs define agent workflows as DAGs with dependencies, retries, and branching. This project uses a flat vector store (no relational structure between properties). The next evolution is embedding graph relationships into the vector store (neighborhood embeddings, similarity clusters) or adding an explicit graph layer on top.
+What makes this distinct from simple loops is that **the loop is structural, not ad hoc**. Each ticket has defined entry (blockers done), body (implement → spec review → quality review), and exit (approved). The dependency graph of tickets creates a DAG of loops — loop engineering at the process level, not just within a single agent.
 
-The agentic subagent workflow itself mirrors a loop-graph structure: each ticket is a node, dependencies are edges, reviews are gates, and the whole pipeline is a directed acyclic graph of subagent invocations. The framework handled this naturally — it's loop/graph engineering applied to the development process itself, not just the application.
+### Graph Engineering
+The ticket dependency graph (6 nodes, 5 edges forming a linear chain) is the graph-engineering aspect. Tickets are nodes, blocking edges are directed dependencies, reviews are gates. This mirrors how graph-based agent systems model workflows — as DAGs where nodes are agents or tool calls and edges are data/control flow. The difference is that in this project the graph is the **development process**, not the **application logic**.
+
+### Position on the Spectrum
+
+| Aspect | This Project | Pure Prompt Engineering | Loop Engineering | Graph Engineering |
+|--------|-------------|------------------------|------------------|-------------------|
+| Workflow | Fixed pipeline (3 subagents per ticket) | Ad hoc prompts | Structured loop with gates | DAG of tickets |
+| State | Stateless per subagent (fresh context) | Stateless (each prompt is independent) | Stateful via feedback (review → fix) | Stateful via graph position |
+| Verification | Two reviews per ticket | None (human judges output) | Observation-based (run → check) | Traversal-based (follow deps) |
+| Reproducibility | High (exact code in plan, exact review) | Low (prompt sensitivity) | Medium (depends on observation quality) | High (graph is explicit) |
+
+This project sits closer to **loop engineering** on the spectrum. The development process is a structured loop with feedback and gates, which is what loop engineering is about. It borrows the DAG structure from graph engineering (to organize the tickets) and the prompt-precision from prompt engineering (to write specs), but the driving pattern is iterative review — a loop.
 
 ## Key Takeaways
 
