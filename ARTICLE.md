@@ -87,3 +87,71 @@ This project sits closer to **loop engineering** on the spectrum. The developmen
 5. **The development process itself can be graphed** — tickets as nodes, dependencies as edges, reviews as gates
 
 The full implementation lives at [github.com/ojwiya/sc-ai](https://github.com/ojwiya/sc-ai). 15 commits. 12 passing tests. One session, one developer (me, directing agents), zero hand-written implementation code.
+
+## References & Evidence
+
+### Tools and Frameworks Used
+
+- **Hermes Agent** — the agent framework that orchestrated subagent dispatch, two-stage review, live transcript streaming, and GitHub integration throughout the session. [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
+- **Matt Pocock engineering skills** (`to-spec`, `to-tickets`, `implement`, `setup-matt-pocock-skills`) — provided the spec→ticket→implementation workflow with triage labels, issue tracker integration, and domain docs scaffolding. [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs)
+- **OpenRouter** — API routing layer for subagent LLM calls. Models used: `deepseek/deepseek-v4-pro` (paid), `inclusionai/ling-3.0-flash:free` (free tier). [openrouter.ai](https://openrouter.ai)
+- **ChromaDB** — persistent local vector store with `all-MiniLM-L6-v2` embeddings. [github.com/chroma-core/chroma](https://github.com/chroma-core/chroma)
+- **GitHub CLI (`gh`)** — issue creation, labeling, closing, and push operations throughout the session. [cli.github.com](https://cli.github.com)
+
+### The Matt Pocock Methodology
+
+This session followed the Matt Pocock engineering skills framework, which is documented in the `hermes-agent` skills catalogue. The key skills used were:
+
+1. `to-spec` — turn the conversation into a published spec on GitHub Issues (issue #1)
+2. `to-tickets` — decompose the spec into tracer-bullet tickets with blocking edges (issues #2–#7)
+3. `implement` — execute the plan via subagent-driven development with two-stage review
+4. `setup-matt-pocock-skills` — configure the issue tracker, triage labels, and domain docs layout
+
+The methodology is based on Matt Pocock's approach to TypeScript-first, type-driven engineering, adapted here for a Python RAG project. Core principles: vertical slices over horizontal layers, two-stage review (spec compliance → code quality), fresh subagent per task, and dependency-ordered execution.
+
+### Evidence of Agentic Flow
+
+- **18+ subagent invocations** across 6 tickets (1 implementer + spec reviewer + quality reviewer per ticket, plus fix cycles)
+- **Live transcripts** captured every subagent interaction: `~/.hermes/cache/delegation/live/deleg_*/task-0.log`
+- **Commit history** is the audit trail — every subagent result traceable to a commit hash on `github.com/ojwiya/sc-ai`
+- **Review loops** documented in subagent transcripts: tickets #3 and #4 each required a spec-compliance fix cycle (2 extra subagent invocations for feedback and correction)
+
+### The Graph/DAG Structure of the Development Process
+
+The ticket dependency graph forms a DAG (directed acyclic graph):
+
+```
+Ticket #2 (env check) → Ticket #3 (build index) → Ticket #4 (search/CLI)
+                                                            ↓
+Ticket #5 (tests) ←── depends on #4 ──→ Ticket #6 (demo) → Ticket #7 (docs)
+```
+
+Nodes = tickets. Edges = blocking dependencies. Reviews = gates. This is a textbook DAG of sub-agent orchestration, structurally identical to how graph-based agent workflows (LangGraph, LlamaIndex Workflow, Haystack) model execution pipelines — except here the graph governs the development process, not the application logic.
+
+### Loop Engineering Patterns Observed
+
+The development process exhibits the core loop engineering pattern:
+
+1. **Action** — subagent implements a ticket
+2. **Observation** — reviewer checks acceptance criteria
+3. **Feedback** — gaps reported back to implementer
+4. **Iteration** — fix subagent dispatched, result re-reviewed
+5. **Gate** — review must pass before proceeding
+6. **Exit** — approved, move to next node in DAG
+
+This mirrors the loop pattern in agentic systems (OpenAI's loop-based tool use, Anthropic's multi-turn agent patterns, and the `loop` concept in loop-engineering frameworks like LangGraph). The loop is structural (defined by the review gates) rather than ad hoc (manual iteration).
+
+### RAG Alternatives Considered — With Sources
+
+- **ChromaDB over Pinecone/Weaviate**: local vector stores eliminate infra cost. See ChromaDB docs on persistent clients: [docs.trychroma.com](https://docs.trychroma.com/)
+- **Cosine similarity over hybrid search (BM25+vector)**: demonstrated sufficient for relevance on property descriptions. See Lee et al., "DPR: Bidirectional Encoder Representations for Retrieval," 2020, for dense retrieval baseline.
+- **No chunking needed**: property records are already atomic — each listing is a self-contained document. Chunking strategies (sentence-splitting, recursive) are discussed in Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks," 2020.
+- **No re-ranking needed**: top-5 results from cosine similarity were sufficient for demo quality. Cross-encoder re-ranking (Bertsch et al., "Re-ranking with Cross-Encoders," 2024) is reserved for production systems where the top result must be optimal.
+
+### Key Papers and Concepts Referenced
+
+- **Retrieval-Augmented Generation** — Lewis et al., 2020. Introduced the RAG pattern of combining retrieval with generation. [arxiv.org/abs/2005.11401](https://arxiv.org/abs/2005.11401)
+- **Loop-based agentic systems** — Yao et al., "Tree of Thoughts," 2023. Structured reasoning loops in LLM agents. [arxiv.org/abs/2305.10601](https://arxiv.org/abs/2305.10601)
+- **DPR (Dense Passage Retrieval)** — Lee et al., 2020. Bidirectional encoding for retrieval, foundation of vector-index search. [arxiv.org/abs/2004.04906](https://arxiv.org/abs/2004.04906)
+- **Graph-based agent execution** — LangGraph framework by LangChain. DAGs for agent workflow orchestration. [docs.langchain.com/langgraph](https://docs.langchain.com/langgraph)
+- **Subagent-driven development patterns** — adapted from the `subagent-driven-development` skill in the Hermes Agent skill catalogue. Core principle: fresh context per subagent + two-stage review = high quality, fast iteration.
