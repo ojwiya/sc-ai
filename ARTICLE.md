@@ -83,7 +83,7 @@ This project sits closer to **loop engineering** on the spectrum. The developmen
 1. **Fresh subagents per task** prevent context pollution and produce clean, self-contained work
 2. **Two-stage review** (spec compliance → code quality) catches issues before they compound
 3. **Bite-sized vertical slices** (one demoable behavior per ticket) keep subagents focused and reviews fast
-4. **Local vector stores** (ChromaDB) are the fastest path from zero to working RAG
+- **Local vector stores** (ChromaDB) are the fastest path from zero to working RAG — no LLM calls required for search. Queries are embedded locally via ONNX MiniLM embeddings and matched with cosine similarity against stored property vectors. Zero API cost, zero external dependencies.
 5. **The development process itself can be graphed** — tickets as nodes, dependencies as edges, reviews as gates
 
 The full implementation lives at [github.com/ojwiya/rag-property-search-poc](https://github.com/ojwiya/rag-property-search-poc). 15 commits. 12 passing tests. One session, one developer (me, directing agents), zero hand-written implementation code.
@@ -95,7 +95,7 @@ The full implementation lives at [github.com/ojwiya/rag-property-search-poc](htt
 - **Hermes Agent** — the agent framework that orchestrated subagent dispatch, two-stage review, live transcript streaming, and GitHub integration throughout the session. [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
 - **Matt Pocock engineering skills** (`to-spec`, `to-tickets`, `implement`, `setup-matt-pocock-skills`) — provided the spec→ticket→implementation workflow with triage labels, issue tracker integration, and domain docs scaffolding. [hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs)
 - **OpenRouter** — API routing layer for subagent LLM calls. Models used: `deepseek/deepseek-v4-pro` (paid), `inclusionai/ling-3.0-flash:free` (free tier). [openrouter.ai](https://openrouter.ai)
-- **ChromaDB** — persistent local vector store with `all-MiniLM-L6-v2` embeddings. [github.com/chroma-core/chroma](https://github.com/chroma-core/chroma)
+- **ChromaDB** — persistent local vector store. Embeddings are generated locally using ONNX MiniLM (`all-MiniLM-L6-v2`) — a small, efficient sentence-transformer model that runs entirely locally via ONNX runtime. No LLM calls, no API keys, no external service required for search. Vector similarity is computed client-side with cosine distance. [github.com/chroma-core/chroma](https://github.com/chroma-core/chroma)
 - **GitHub CLI (`gh`)** — issue creation, labeling, closing, and push operations throughout the session. [cli.github.com](https://cli.github.com)
 
 ### The Matt Pocock Methodology
