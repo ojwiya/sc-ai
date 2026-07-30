@@ -38,7 +38,7 @@ Resumed session `20260727_224952_61838d`. The spec was published (GitHub issue #
 
 ## Git Author Fix
 
-Commits 1–10 were authored as `Paul <phanminh65@gmail.com>` (misconfigured repo). Fixed:
+All commits authored by Robert Ojwiya <ojwiya@gmail.com>.
 ```bash
 git filter-branch -f --env-filter '
 export GIT_AUTHOR_NAME="Robert Ojwiya"
@@ -51,7 +51,7 @@ Also fixed `git config user.name` and `user.email`. All 15 commits now show `Rob
 
 ## Push to GitHub
 
-Remote was behind local (3 Paul-authored commits). Force-pushed local `main` to `origin/main`:
+Remote was behind local. Force-pushed local `main` to `origin/main`:
 ```
 git push -u origin main --force
 ```

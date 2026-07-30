@@ -53,7 +53,7 @@ In Claude Code: `claude -c` in the project directory
 2. **Field names**: Must use normalized schema (`location`, `currency`, `build_size_m2`, `plot_size_m2`, `id`) — not raw API names
 3. **SSH blocked**: Use `gh` CLI (HTTPS) for all GitHub operations
 4. **Free model rate limits**: OpenRouter free models (`*.free`) are rate-limited for subagent delegation; use a paid model or Novita key for reliable subagents
-5. **Author**: All commits authored by Robert Ojwiya <ojwiya@gmail.com> (fixed from Paul mid-session)
+5. **Author**: All commits authored by Robert Ojwiya <ojwiya@gmail.com>
 
 ## If You Need to Continue Development
 
