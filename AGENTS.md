@@ -1,4 +1,4 @@
-# sc-ai — Overseas Property RAG
+# rag-property-search-poc — Overseas Property RAG
 
 RAG (Retrieval-Augmented Generation) pipeline for searching overseas property listings scraped from Your Overseas Home.
 
@@ -6,7 +6,7 @@ RAG (Retrieval-Augmented Generation) pipeline for searching overseas property li
 
 ### Issue tracker
 
-GitHub Issues at https://github.com/ojwiya/sc-ai. See `docs/agents/issue-tracker.md`.
+GitHub Issues at https://github.com/ojwiya/rag-property-search-poc. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

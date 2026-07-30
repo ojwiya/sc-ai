@@ -86,7 +86,7 @@ This project sits closer to **loop engineering** on the spectrum. The developmen
 4. **Local vector stores** (ChromaDB) are the fastest path from zero to working RAG
 5. **The development process itself can be graphed** — tickets as nodes, dependencies as edges, reviews as gates
 
-The full implementation lives at [github.com/ojwiya/sc-ai](https://github.com/ojwiya/sc-ai). 15 commits. 12 passing tests. One session, one developer (me, directing agents), zero hand-written implementation code.
+The full implementation lives at [github.com/ojwiya/rag-property-search-poc](https://github.com/ojwiya/rag-property-search-poc). 15 commits. 12 passing tests. One session, one developer (me, directing agents), zero hand-written implementation code.
 
 ## References & Evidence
 
@@ -113,7 +113,7 @@ The methodology is based on Matt Pocock's approach to TypeScript-first, type-dri
 
 - **18+ subagent invocations** across 6 tickets (1 implementer + spec reviewer + quality reviewer per ticket, plus fix cycles)
 - **Live transcripts** captured every subagent interaction: `~/.hermes/cache/delegation/live/deleg_*/task-0.log`
-- **Commit history** is the audit trail — every subagent result traceable to a commit hash on `github.com/ojwiya/sc-ai`
+- **Commit history** is the audit trail — every subagent result traceable to a commit hash on `github.com/ojwiya/rag-property-search-poc`
 - **Review loops** documented in subagent transcripts: tickets #3 and #4 each required a spec-compliance fix cycle (2 extra subagent invocations for feedback and correction)
 
 ### The Graph/DAG Structure of the Development Process

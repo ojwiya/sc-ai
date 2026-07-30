@@ -1,4 +1,4 @@
-# CONTEXT.md — Overseas Property RAG (sc-ai)
+# CONTEXT.md — Overseas Property RAG (rag-property-search-poc)
 
 Project glossary and current state for agents working in this repo.
 Read this first. For agent-skill wiring see `AGENTS.md` and `docs/agents/`.
@@ -43,7 +43,7 @@ ranked results (title, price, location, country, bedrooms, bathrooms, score)
 
 - ✅ All 6 MVP tickets (#2–#7) implemented, reviewed (2-stage), and merged to `main`
 - ✅ 15 commits, all authored by **Robert Ojwiya <ojwiya@gmail.com>**
-- ✅ Pushed to `github.com/ojwiya/sc-ai`
+- ✅ Pushed to `github.com/ojwiya/rag-property-search-poc`
 - ✅ All 7 GitHub issues (#1 spec + #2–#7 tickets) closed
 - ✅ 12/12 pytest tests passing (`tests/test_search.py`)
 - ✅ `chroma_db/` rebuilt on 2026-07-28 after the field-name fix — location data is

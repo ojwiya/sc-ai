@@ -1,4 +1,4 @@
-# Continuity Guide — sc-ai Project
+# Continuity Guide — rag-property-search-poc Project
 
 ## Picking Up in a New Session
 
@@ -6,7 +6,7 @@
 
 ```bash
 # Current state
-cd /Users/admin/Documents/sc-ai          # project root (not default home dir)
+cd /Users/admin/Documents/rag-property-search-poc          # project root (not default home dir)
 git log --oneline -3                     # recent commits
 make test                                # health check — should say 12 passed
 python3 scripts/search.py "villa in Spain with pool" --limit 3   # smoke test
@@ -14,7 +14,7 @@ python3 scripts/search.py "villa in Spain with pool" --limit 3   # smoke test
 
 ### Step 2: Understand the project
 
-- **Project**: `sc-ai` — Overseas Property RAG pipeline (GitHub: `ojwiya/sc-ai`)
+- **Project**: `rag-property-search-poc` — Overseas Property RAG pipeline (GitHub: `ojwiya/rag-property-search-poc`)
 - **Data**: 11,960 properties across 9 countries in `properties_clean.json`
 - **Vector store**: ChromaDB at `chroma_db/` (gitignored, must be rebuilt after code changes)
 - **Key code**: `scripts/build_index.py`, `scripts/search.py`, `tests/test_search.py`
@@ -38,7 +38,7 @@ In Claude Code: `claude -c` in the project directory
 | #6 | `demo.py` (3 queries) | ✅ Complete |
 | #7 | `README.md` + `Makefile` | ✅ Complete |
 | Docs | `CONTEXT.md`, `ARTICLE.md`, `SESSION_SUMMARY.md` | ✅ Complete |
-| Push | Force-pushed to `github.com/ojwiya/sc-ai` | ✅ Done |
+| Push | Force-pushed to `github.com/ojwiya/rag-property-search-poc` | ✅ Done |
 
 ## Key Files for Continuity
 
@@ -64,9 +64,9 @@ The Matt Pocock skills are configured (`AGENTS.md` → `docs/agents/`):
 
 ## Environment
 
-- Repo: `/Users/admin/Documents/sc-ai`
+- Repo: `/Users/admin/Documents/rag-property-search-poc`
 - Python: 3.14 at `/usr/local/bin/python3`
 - ChromaDB: 1.5.9
-- Git remote: `https://github.com/ojwiya/sc-ai.git` (HTTPS, gH keyring)
+- Git remote: `https://github.com/ojwiya/rag-property-search-poc.git` (HTTPS, gH keyring)
 - Hermes profiles: `~/.hermes/profiles/default/`
 - Config: `~/.hermes/config.yaml` (delegation.model = deepseek/deepseek-v4-pro; delegation.provider = openrouter)

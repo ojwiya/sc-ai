@@ -2,7 +2,7 @@
 
 ## Overview
 
-Completed implementation of the `sc-ai` MVP (Overseas Property RAG) — a ChromaDB-backed pipeline for searching overseas property listings via natural language.
+Completed implementation of the `rag-property-search-poc` MVP (Overseas Property RAG) — a ChromaDB-backed pipeline for searching overseas property listings via natural language.
 
 ## Starting point
 
@@ -66,7 +66,7 @@ All 7 GitHub issues (#1–#7) closed.
 ## Final State
 
 - 15 commits on `main`, all authored by Robert Ojwiya
-- Pushed to `github.com/ojwiya/sc-ai`
+- Pushed to `github.com/ojwiya/rag-property-search-poc`
 - 12/12 pytest tests passing
 - 7 GitHub issues (spec + 6 tickets), all closed
 - `chroma_db/` rebuilt with correct field names (local, gitignored)

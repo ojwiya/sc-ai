@@ -725,7 +725,7 @@ git commit -m "feat: add end-to-end demo script"
 Replace the entire contents of `README.md` with:
 
 ```markdown
-# sc-ai — Overseas Property RAG
+# rag-property-search-poc — Overseas Property RAG
 
 RAG (Retrieval-Augmented Generation) pipeline for searching 11,960 overseas properties scraped from [Your Overseas Home](https://www.youroverseashome.com/).
 
@@ -768,7 +768,7 @@ python3 scripts/search.py "3 bedroom villa in Spain near the beach"
 ## Project Structure
 
 ```
-sc-ai/
+rag-property-search-poc/
 ├── demo.py                 # End-to-end demo
 ├── scrape.py               # API scraper (11,960 properties)
 ├── normalize_data.py       # Data enrichment (country names, types, brackets)
@@ -900,11 +900,11 @@ git commit -m "chore: add Makefile for convenience commands"
 
 **Objective:** Push the repo to GitHub.
 
-**Background:** SSH to GitHub (port 22) is blocked by firewall. The repo `sc-ai` does not yet exist on GitHub under the `ojwiya` account.
+**Background:** SSH to GitHub (port 22) is blocked by firewall. The repo `rag-property-search-poc` does not yet exist on GitHub under the `ojwiya` account.
 
 **Step 1: Create the repo on GitHub**
 
-The user needs to create `sc-ai` repository on GitHub (either manually at github.com/new or via `gh repo create`).
+The user needs to create `rag-property-search-poc` repository on GitHub (either manually at github.com/new or via `gh repo create`).
 
 **Step 2: Set up HTTPS remote with token**
 
@@ -915,7 +915,7 @@ cd /Users/admin/Documents/sc-ai
 git remote remove origin
 
 # Add HTTPS remote (user needs to replace TOKEN with their personal access token)
-git remote add origin https://TOKEN@github.com/ojwiya/sc-ai.git
+git remote add origin https://TOKEN@github.com/ojwiya/rag-property-search-poc.git
 
 # Push
 git push -u origin main
@@ -925,14 +925,14 @@ git push -u origin main
 
 ```bash
 gh auth login
-gh repo create ojwiya/sc-ai --public --source=. --remote=origin --push
+gh repo create ojwiya/rag-property-search-poc --public --source=. --remote=origin --push
 ```
 
 **Step 3: Verify**
 
 ```bash
 git remote -v
-# Should show: origin  https://github.com/ojwiya/sc-ai.git
+# Should show: origin  https://github.com/ojwiya/rag-property-search-poc.git
 ```
 
 ---
@@ -963,7 +963,7 @@ Task 1 (check_env) ──┐
 Each subagent implementing these tasks needs this context block pasted into its `context` field:
 
 ```
-PROJECT: Overseas property RAG pipeline (sc-ai)
+PROJECT: Overseas property RAG pipeline (rag-property-search-poc)
 ROOT: /Users/admin/Documents/sc-ai
 PYTHON: /usr/local/bin/python3 (use `python3` in commands)
 CHROMADB: 1.5.9, installed and importable

@@ -1,4 +1,4 @@
-# sc-ai — Overseas Property RAG
+# rag-property-search-poc — Overseas Property RAG
 
 RAG pipeline for searching overseas property listings scraped from Your Overseas Home.
 
