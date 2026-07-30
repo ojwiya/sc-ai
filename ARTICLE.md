@@ -154,4 +154,8 @@ This mirrors the loop pattern in agentic systems (OpenAI's loop-based tool use, 
 - **Loop-based agentic systems** — Yao et al., "Tree of Thoughts," 2023. Structured reasoning loops in LLM agents. [arxiv.org/abs/2305.10601](https://arxiv.org/abs/2305.10601)
 - **DPR (Dense Passage Retrieval)** — Lee et al., 2020. Bidirectional encoding for retrieval, foundation of vector-index search. [arxiv.org/abs/2004.04906](https://arxiv.org/abs/2004.04906)
 - **Graph-based agent execution** — LangGraph framework by LangChain. DAGs for agent workflow orchestration. [docs.langchain.com/langgraph](https://docs.langchain.com/langgraph)
-- **Subagent-driven development patterns** — adapted from the `subagent-driven-development` skill in the Hermes Agent skill catalogue. Core principle: fresh context per subagent + two-stage review = high quality, fast iteration.
+| **Subagent-driven development patterns** — adapted from the `subagent-driven-development` skill in the Hermes Agent skill catalogue. Core principle: fresh context per subagent + two-stage review = high quality, fast iteration.
+
+### Automated Documentation with OpenWiki
+
+The repo uses [OpenWiki](https://github.com/langchain-ai/openwiki) to auto-generate and maintain agent documentation. OpenWiki scans the codebase, produces wiki pages (`openwiki/`) covering the quickstart, architecture, and search seam, and keeps them current via a scheduled GitHub Action (daily at 8am). The wiki is linked from `AGENTS.md` and `CLAUDE.md`, so future agents land on the right reference page immediately — no need to read every source file to understand how the system works.
