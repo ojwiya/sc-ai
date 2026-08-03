@@ -1,4 +1,4 @@
-# Overseas Property RAG — Your Overseas Home
+# RAG  Search for Your Overseas Overseas Home
 
 A RAG (Retrieval-Augmented Generation) pipeline for searching overseas property
 listings scraped from [Your Overseas Home](https://www.youroverseashome.com/)
@@ -143,3 +143,10 @@ make clean     # remove chroma_db/ and Python caches
 The site exposes a REST API at
 `property-portal-api-gw.youroverseashome.com/api/v1/properties/search`
 with 128,311 total properties. The MVP uses an 11,960-property sample.
+
+## Website 
+A website has been created in a separate repo to demonstrate how this would work in a version of the existing website. [Homes in the Sun](website-rag-search-poc.vercel.app/)  (Homes in the Sun). It features:
+    - A natural-language search POC over ~11,960 listings across multiple countries (Spain, Cyprus, Portugal, France, Italy, USA, Malta, etc.).
+    - Type plain English ("Villa with pool, Costa del Sol", "Properties €300,000 and below") and it intersects all terms (AND-logic), with working price caps, sorting (price/newest), and pagination.
+    - Multi-country by default; no country dropdown — relevance + natural language replace structured filters.
+    
