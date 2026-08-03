@@ -4,6 +4,8 @@ A RAG (Retrieval-Augmented Generation) pipeline for searching overseas property
 listings scraped from [Your Overseas Home](https://www.youroverseashome.com/)
 using natural language queries.
 
+See POC website at : [Homes in the Sun](website-rag-search-poc.vercel.app/) 
+
 ## What it does
 
 - Scrapes ~11,960 property listings across 9 countries
